@@ -1,0 +1,91 @@
+Connecting to BlueHive can be done using a command line SSH client such as MobaXTerm or a graphical user interface SSH client such as X2Go.  Files can be transfered on MobaXTerm using the file directory functionality on the left hand side or using a program such as WinSCP.  For the purposes of this project, the text editor used was Notepad++ and Gedit (?).  The CPU code was written in C and was compiled with gcc.  The CUDA GPU code was written in CUDA and was compiled with nvcc.  The OpenCL GPU code was written in C++ and OpenCL.  The following modules need to be loaded before compilation: gtk, opencv, cuda, gcc/4.7.2.
+
+CPU 
+2 Intel Xeon E5-2695 v2 processors with 12 cores each
+Between 64 and 512 GB of physical memory
+
+GPU
+Tesla K20Xm contains
+6 GB of physical memory
+2688 cores @ 732 MHz
+
+salloc -t 5 -A ece406 -p ece406 --gres=gpu:1 srun
+
+
+CPU Program:
+Uses pthreads to divide work
+Requires the use of accompanying ImageStuff.h and ImageStuff.c to setup RGB pixel values.
+
+CUDA Program:
+Launches Kernels in Threads and Blocks
+
+OpenCL Program: 
+Creates Device Contexts with Command Queues.
+Command Queues are populated by compiled instructions. (can be out of order)
+Compiles .cl file at runtime
+
+
+IMFLIP (HORIZONTAL FLIP)
+CPU: 59.9433 ms
+CUDA: 
+Tfr CPU->GPU =  3.90 ms ...
+Execution = 15.65 ms ...
+Tfr GPU->CPU =  3.44 ms
+
+GPU Execution Time = 15.65 ms
+Total Execution Time = 22.98 ms
+
+OPENCL: 
+Host to Device Transfer Time : 3.416 ms
+GPU Execution Time : 15.253 ms
+Device to Host Transfer Time : 72.583 ms
+Total Execution Time : 91.252 ms
+---------------------------------------------------
+IMEDGE
+CPU:
+   Input BMP File name:             dogL.bmp  (3200 x 2400)
+
+.....ReadBMP complete               ...     192 ms
+
+.....Auxiliary images created       ...     186 ms
+
+.....Gauss Image created            ...     743 ms
+
+.....Gradient, Theta calculated     ...     834 ms
+
+.....Thresholding completed         ...      71 ms
+
+  Output BMP File name:          outfile.bmp  (3200 x 2400)
+
+.....WriteBMP completed             ...      67 ms
+
+.....Program Runtime without IO     ...    1917 ms
+
+CUDA:
+
+Tfr CPU->GPU =  6.39 ms ...
+Execution = 260.97 ms ...
+Tfr GPU->CPU =  4.14 ms
+Sum of Iteration = 271.50 ms
+
+Total Tfr CPU -> GPU Time =  6.39 ms
+GPU Execution Time = 260.97 ms
+Total Tfr GPU -> CPU Time =  4.14 ms
+Total Execution Time = 271.50 ms
+
+OPENCL:
+
+Host to Device Transfer Time : 3.222 ms
+GPU Execution Time : 2.730 ms
+Device to Host Transfer Time : 3.734 ms
+Total Execution Time : 9.686 ms
+
+-------------------------------------------------------
+
+IMROTATE
+1 Rotation CPU: Total execution time:  725.7300 ms.
+
+5 Rotations CUDA:GPU Execution Time = 640.78 ms
+Total Execution Time = 685.40 ms
+
+5 Rotations OPENCL:Total Execution Time : 49.426 ms
