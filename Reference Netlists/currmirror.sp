@@ -1,0 +1,40 @@
+** Part 1 - Current Mirror - Output Voltage **
+.INCLUDE sedra_lib.lib
+
+* DC and AC Sources
+VD VDD 0 DC 3.3V
+V1 D1 0 DC 1.0883V
+V2 D2 0 DC 1.0883V
+
+* Resistors
+R VDD D0 23.541K
+
+* MOSFETs
+M0 D0 D0 0 0 NMOS0P5 W=5U L=0.5U
+M1 D1 D0 0 0 NMOS0P5 W=50U L=0.5U
+M2 D2 D0 0 0 NMOS0P5 W=250U L=0.5U
+
+.OPTIONS POST
+.OP
+** Part 1
+.PROBE I(M0)
+.PROBE I(M1)
+.PROBE I(M2)
+
+** Finding the output resistance
+.DC V1 0.1 3.3 0.01
+.PRINT V(D1) I(M1)
+.MEASURE DC I1a FIND I(M1) WHEN V(D1)=0.6
+.MEASURE DC I1b FIND I(M1) WHEN V(D1)=3.3
+.DC V2 0.1 3.3 0.01
+.PRINT V(D2) I(M2)
+.MEASURE DC I2a FIND I(M2) WHEN V(D2)=0.6
+.MEASURE DC I2b FIND I(M2) WHEN V(D2)=3.3
+
+** Finding the output voltage
+.DC V1 0.1 3.3 0.01
+.MEASURE DC Vout1 FIND V(D1) WHEN I(M1)=1.00E-3
+.DC V2 0.1 3.3 0.01
+.MEASURE DC Vout2 FIND V(D2) WHEN I(M2)=5.00E-3
+
+.END

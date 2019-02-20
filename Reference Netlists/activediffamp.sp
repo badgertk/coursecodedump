@@ -1,0 +1,32 @@
+** Active-Loaded Differential Amplifier **
+
+.INCLUDE sedra_lib.lib
+
+* DC and AC Supplies
+VDD VD 0 DC 3.3V 
+VD1 SS 0 DC 1.0883V
+VG1 G1 0 DC 2.5V AC 1m
+VG2 G2 0 DC 2.5V
+
+* Resistors or Capacitors
+R VD GG 23.541K
+CL VO 0 0.2P
+
+* MOSFETs
+M1 DD G1 SS 0 NMOS0P5 W=1U L=30.5U
+M2 VO G2 SS 0 NMOS0P5 W=1U L=30.5U
+
+M3 DD DD VD VD PMOS0P5 W=1U L=40U
+M4 VO DD VD VD PMOS0P5 W=1U L=40U
+
+M5 GG GG 0 0 NMOS0P5 W=5u L=0.5u
+M6 SS GG 0 0 NMOS0P5 W=50u L=0.5u
+
+
+.OPTIONS POST
+.OP
+
+.AC DEC 10 1E-3 1E12 **SWEEP VG1 0 3 0.1
+.PRINT AC AM = PAR('VM(VO)/VM(G1)')
+
+.END
